@@ -1,210 +1,132 @@
-# NOVA-NEXUS---IN-TIME-CODERS
-# 🏭 Nova Nexus — AI Manufacturing Order Management
+# ⚙️ Nova Nexus — Manufacturing Order Intelligence Platform
 
-> *Nova Nexus Hackathon 2025* · DSATM College · Built with React + Claude AI
-
-An AI-powered manufacturing order management system where users interact entirely through natural language to place orders, update statuses, and log quality checkpoints.
+> NOVA NEXUS Hackathon 2025 | DSATM College | MCA Department
 
 ---
 
-## ✨ Features
+## 🚀 Quick Start (VS Code)
 
-| Feature | Description |
-|---|---|
-| 🤖 NLP Chat Interface | Natural language order placement & management via Claude AI |
-| 📦 Order Management | Create, track, and update orders through conversation |
-| 👤 User (Client) Auth | Place orders, view own orders |
-| 🏭 Vendor Auth | Update statuses, log quality notes |
-| 📊 Live Dashboard | Real-time order tracking with status & quality logs |
-| 🔍 Multi-Order Queries | "Show all accepted orders" — bonus feature |
-| 💾 Persistent Storage | localStorage-based persistence across sessions |
+### Option 1 — Live Server (Recommended)
+1. Open the `nova-nexus` folder in **VS Code**
+2. Install the **Live Server** extension (ritwickdey.LiveServer)
+3. Right-click `index.html` → **"Open with Live Server"**
+4. Browser opens at `http://127.0.0.1:5500`
 
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-- *Node.js* v18+ → [Download](https://nodejs.org)
-- *npm* v9+ (comes with Node.js)
-- A terminal (VS Code integrated terminal works great)
-
-### Step 1 — Clone / Setup
-bash
-# If you have git:
-git clone <your-repo-url>
-cd nova-nexus
-
-# OR if you downloaded the zip:
-cd nova-nexus
-
-
-### Step 2 — Install Dependencies
-bash
-npm install
-
-> This installs React, React Router, Framer Motion, date-fns, uuid — takes ~1 minute.
-
-### Step 3 — Run the App
-bash
-npm start
-
-> Opens at *http://localhost:3000* automatically.
+### Option 2 — Direct Open
+- Just double-click `index.html` — it works directly in any modern browser (Chrome, Edge, Firefox)
 
 ---
 
-## 🔑 Demo Accounts
+## 🔑 Demo Credentials
 
-### Client (User) Accounts
-| Email | Password | Name |
-|---|---|---|
-| alice@client.com | user123 | Alice Chen |
-| bob@client.com | user123 | Bob Mercer |
+| Role | Username | Password | Can Do |
+|------|----------|----------|--------|
+| User | `admin` | `admin123` | Place orders via chat, check status, query orders |
+| Vendor | `vendor` | `vendor123` | Move orders: Received → In Review |
+| Manufacturer | `mfg` | `mfg123` | Move orders: In Review → Accepted + Quality Logs |
 
-*Client can:* Place orders via chat, view own orders, query order status.
+> You can also **register new accounts** from the login screen.
 
-### Vendor Accounts
-| Email | Password | Name |
-|---|---|---|
-| ops@vendor.com | vendor123 | Rajan Kumar |
-| quality@vendor.com | vendor123 | Sneha Patel |
+---
 
-*Vendor can:* Update order status, log quality inspection notes, view all orders.
+## 🏗️ Architecture
 
-> You can also register new accounts from the login page.
+```
+index.html (Single File App)
+├── Auth Layer         → localStorage user accounts + sessionStorage sessions
+├── Chat Interface     → NLP via Groq API (llama-3.3-70b-versatile)
+│   ├── Intent Classification  → Groq (create_order / status_query / list_query / quality_query)
+│   └── Entity Extraction      → Groq (partName, material, quantity, unit, deadline, specs)
+├── Order Dashboard    → Real-time from localStorage, filterable + searchable
+├── Vendor Panel       → Status management UI (no AI — pure UI logic)
+└── Data Persistence   → localStorage (orders, users, counter)
+```
+
+---
+
+## ✅ Features Implemented
+
+### Core Requirements (from PDF + Whiteboard)
+| Feature | Status |
+|---------|--------|
+| NLP Chat Interface (Groq LLM) | ✅ |
+| Create Order via natural language | ✅ |
+| Extract: part, material, qty, deadline, specs | ✅ |
+| Update status via chat (User asks, Vendor acts) | ✅ |
+| Order status flow: Received → In Review → Accepted | ✅ |
+| Quality log updates with timestamps | ✅ |
+| Order Dashboard (read-only, all orders) | ✅ |
+| Auto-updates on order create/change | ✅ |
+| localStorage persistence | ✅ |
+| User Authentication (register/login/logout) | ✅ |
+| **Bonus: Multi-order awareness** | ✅ |
+
+### Role System
+- **User** — Interacts via chat, places orders, checks status
+- **Vendor** — Manages orders panel: moves Received → In Review
+- **Manufacturer** — Manages orders panel: moves In Review → Accepted, adds quality logs
+
+### Bonus Features
+- Filter orders by status
+- Search orders by part name, material, order ID
+- Stats bar (total, received, in review, accepted)
+- Quick prompt buttons
+- Live NLP indicator
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Vanilla HTML5, CSS3, JavaScript (ES2024) |
+| NLP | Groq API — llama-3.3-70b-versatile |
+| Storage | localStorage + sessionStorage |
+| No build tools | Zero dependencies — open directly |
 
 ---
 
 ## 💬 Example Chat Commands
 
-### As a Client (User):
-
+```
+# Place an order:
 "I need 200 titanium flanges, 80mm bore, delivered by July 20"
-"Place an order for 500 stainless steel brackets, 5mm thick, by June 15"
+"Order 500kg of stainless steel rods grade 316L by August 1"
+
+# Check status:
+"What's the status of order #3?"
+"Show order #1"
+
+# List orders (BONUS - multi-order awareness):
+"Show all accepted orders"
+"List all orders in review"
 "Show me all my orders"
-"What's the status of order #1?"
 
-
-### As a Vendor:
-
-"Mark order #1 as in review"
-"Order #2 has been reviewed and accepted"
-"Quality update on order #3 — passed visual inspection, no surface defects"
-"Show all orders in review"
-"List all accepted orders"
-
+# Quality queries:
+"What are the quality notes on order #2?"
+```
 
 ---
 
-## 🏗️ Tech Stack
+## 📊 Judging Criteria Coverage
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 18 + CSS Modules |
-| Routing | React Router v6 |
-| AI / NLP | Claude API (claude-sonnet-4) with regex fallback |
-| State | React Context API |
-| Persistence | localStorage |
-| Animations | CSS Animations + Framer Motion |
-| Dates | date-fns |
-| IDs | uuid |
-| Fonts | Syne, JetBrains Mono, Instrument Serif (Google Fonts) |
+| Criteria | Marks | Implementation |
+|----------|-------|---------------|
+| NLP Extraction Accuracy | 30 | Groq llama-3.3-70b with structured JSON prompts |
+| Token Efficiency | 25 | Stateless extraction, minimal context, 2 API calls max |
+| UI/Dashboard Clarity | 20 | Live dashboard, status badges, filters, search |
+| Functionality & Completeness | 15 | All 4 features + auth working end-to-end |
+| **Bonus: Multi-Order Awareness** | 10 | Intent classifier detects list queries with status filter |
 
 ---
 
-## 📁 Project Structure
+## 🌐 Deployment (Bonus Points)
 
-
-nova-nexus/
-├── public/
-│   └── index.html
-├── src/
-│   ├── components/
-│   │   └── ProtectedRoute.jsx       # Auth guard
-│   ├── context/
-│   │   ├── AuthContext.jsx          # Authentication state & logic
-│   │   └── OrdersContext.jsx        # Order management state
-│   ├── pages/
-│   │   ├── Auth.jsx / .module.css   # Login + Register
-│   │   ├── Dashboard.jsx / .css     # Layout with sidebar
-│   │   ├── Overview.jsx / .css      # Dashboard home
-│   │   ├── Chat.jsx / .css          # AI Chat interface
-│   │   ├── Orders.jsx / .css        # Order dashboard
-│   │   └── QualityPage.jsx / .css   # Quality logs (vendor)
-│   ├── utils/
-│   │   └── nlpParser.js             # Claude API + regex NLP parser
-│   ├── styles/
-│   │   └── global.css               # Design system variables
-│   ├── App.jsx                      # Router & providers
-│   └── index.js                     # Entry point
-└── package.json
-
+To deploy on **Vercel**:
+1. Push to GitHub
+2. Import repo on vercel.com
+3. No build config needed — static site
 
 ---
 
-## 🌐 Deployment
-
-### Deploy to Vercel (Recommended — Free, Fast)
-
-bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Build & deploy
-npm run build
-vercel --prod
-
-
-*OR via Vercel Dashboard:*
-1. Push code to GitHub
-2. Go to [vercel.com](https://vercel.com) → New Project
-3. Import your GitHub repo
-4. Click Deploy — done! ✅
-
-### Deploy to Netlify
-
-bash
-# Build the app
-npm run build
-
-# Install Netlify CLI
-npm i -g netlify-cli
-
-# Deploy
-netlify deploy --prod --dir=build
-
-
-*OR drag & drop* the build/ folder at [app.netlify.com/drop](https://app.netlify.com/drop).
-
----
-
-## 🎯 Judging Criteria Coverage
-
-| Criteria | Max | Coverage |
-|---|---|---|
-| NLP Extraction Accuracy | 30 | ✅ Claude API + regex fallback for part, qty, deadline, material, status, order ID |
-| Token Efficiency | 25 | ✅ Stateless extraction, context trimming (last 10 orders only), no conversation history sent |
-| UI / Dashboard Clarity | 20 | ✅ Industrial dark theme, status badges, order cards, detail drawer |
-| Functionality & Completeness | 15 | ✅ All 4 features + auth |
-| Multi-Order Awareness (Bonus) | 10 | ✅ "Show all accepted orders", "list orders in review" |
-
----
-
-## 🔒 Authentication Architecture
-
-- *Role-based*: user (client) or vendor — enforced in UI, NLP parser, and route guards
-- *localStorage-based*: Accounts and session stored in browser
-- *Pre-seeded accounts* for demo; registration supported
-- Route-level protection via <ProtectedRoute> component
-
----
-
-## 📝 Notes
-
-- Claude API calls are made from the browser — no backend required
-- If Claude API is unavailable, regex fallback parser activates automatically
-- All data is in-memory/localStorage — resets on browser clear
-- The app works fully offline with regex fallback
-
----
-
-Built for Nova Nexus Hackathon 2025 · MCA Department · DSATM College
+Built for Nova Nexus Hackathon 2025 · DSATM College · MCA Department
